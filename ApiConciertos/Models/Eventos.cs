@@ -5,7 +5,7 @@ namespace ApiConciertos.Models
     public class Eventos
     {
 
-        public int id_evento { get; set; }
+        public Guid id_evento { get; set; }
 
         [Required(ErrorMessage = "Debe ingresar el nombre del concierto")]
         [MinLength(2, ErrorMessage = "La cantidad mínima es 1")]

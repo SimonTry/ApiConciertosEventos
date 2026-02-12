@@ -5,12 +5,12 @@ namespace ApiConciertos.Interfaces
     public interface IEventosService
     {
         List<Eventos> GetAll();
-        Eventos getById(int id);
+        Eventos getById(Guid id);
 
-        //Eventos Create(Eventos evento);
+        Eventos Create(Eventos evento);
 
-        //bool Update(int id, Eventos evento);
+        bool Update(Guid id, Eventos evento);
 
-        //bool SoftDelete(int id);
+        bool ChangeStatus(Guid id);
     }
 }

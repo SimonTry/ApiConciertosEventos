@@ -22,56 +22,41 @@ namespace ApiConciertos.Controllers
         [HttpGet]
         public IActionResult GetAll() => Ok(_eventService.GetAll());
 
-        //[HttpGet("{id}")]
-        //public IActionResult getById(int id)
-        //{
-        //    var evento = _eventos.FirstOrDefault(e => e.id_evento == id);
-        //    if(evento == null)
-        //    {
-        //        return NotFound("No existe el evento");
-        //    }
-        //    return Ok(evento);
-        //}
+        [HttpGet("{id}")]
+        public IActionResult getById(Guid id)
+        {
+            var evento = _eventService.getById(id);
+            //Se refactoriza condicion por una operación ternaria o si corto
+            return evento != null ? Ok(evento) : NotFound();
+            //if (evento == null)
+            //{
+            //    return NotFound("No existe el evento");
+            //}
+            //return Ok(evento);
+        }
 
-        //[HttpPost]
-        //public IActionResult Create([FromBody] Eventos newEvent)
-        //{
-            
-        //        newEvent.id_evento = _eventos.Max(e => e.id_evento) + 1;
-        //        _eventos.Add(newEvent);
-        //        return CreatedAtAction(nameof(getById),
-        //            new { id = newEvent.id_evento }, newEvent);     
-        //}
+        [HttpPost]
+        public IActionResult Create([FromBody] Eventos newEvent)
+        {
 
-        //[HttpPut]
-        //public IActionResult Edit(int id, [FromBody] Eventos editedEvent)
-        //{
-        //    // validar que el evento si exista
-        //    var evento_existente = _eventos.FirstOrDefault(e => e.id_evento == id);
-        //    // si no existe el objeto (evento) retornamos un not found
-        //    if (evento_existente == null) return NotFound();
-        //    // modificar cada atributo del objeto si existe
-        //    evento_existente.nombre_evento = editedEvent.nombre_evento;
-        //    evento_existente.fecha_evento = editedEvent.fecha_evento;
-        //    evento_existente.artista = editedEvent.artista;
+            var createdEvent = _eventService.Create(newEvent);
+            return CreatedAtAction(nameof(getById),new { id = createdEvent.id_evento }, createdEvent);
+        }
 
-        //    return NoContent();
-        //}
+        [HttpPut]
+        public IActionResult Edit(Guid id, [FromBody] Eventos editedEvent)
+        {
 
-        //[HttpPatch("{id}/soft-delete")]
-        //public IActionResult SoftDelete(int id)
-        //{
-        //    // validar que el evento si exista
-        //    var evento_existente = _eventos.FirstOrDefault(e => e.id_evento == id);
-        //    // si no existe el objeto (evento) retornamos un not found
-        //    if (evento_existente == null) return NotFound();
+            return _eventService.Update(id, editedEvent) ? NoContent(): NotFound();
+        }
 
-        //    evento_existente.isActive = 0;
+        [HttpPatch("{id}/change-status")]
+        public IActionResult ChangeStatus(Guid id)
+        {
+            return _eventService.ChangeStatus(id) ? Ok("Se ha cambiado el estado del evento") : NotFound();
+        }
 
-        //    return Ok($"El evento ID:{id} se ha desactivado");
-        //}
 
-        
 
 
     }
