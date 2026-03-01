@@ -20,12 +20,12 @@ namespace ApiConciertos.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetAll() => Ok(_eventService.GetAll());
+        public async Task<IActionResult> GetAll() => Ok( await _eventService.GetAll());
 
         [HttpGet("{id}")]
-        public IActionResult getById(Guid id)
+        public async Task<IActionResult> getById(Guid id)
         {
-            var evento = _eventService.getById(id);
+            var evento = await _eventService.getById(id);
             //Se refactoriza condicion por una operación ternaria o si corto
             return evento != null ? Ok(evento) : NotFound();
             //if (evento == null)
@@ -36,24 +36,24 @@ namespace ApiConciertos.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Eventos newEvent)
+        public async Task<IActionResult> Create([FromBody] Eventos newEvent)
         {
 
-            var createdEvent = _eventService.Create(newEvent);
+            var createdEvent = await _eventService.Create(newEvent);
             return CreatedAtAction(nameof(getById),new { id = createdEvent.id_evento }, createdEvent);
         }
 
         [HttpPut]
-        public IActionResult Edit(Guid id, [FromBody] Eventos editedEvent)
+        public async Task<IActionResult> Edit(Guid id, [FromBody] Eventos editedEvent)
         {
 
-            return _eventService.Update(id, editedEvent) ? NoContent(): NotFound();
+            return await _eventService.Update(id, editedEvent) ? NoContent(): NotFound();
         }
 
         [HttpPatch("{id}/change-status")]
-        public IActionResult ChangeStatus(Guid id)
+        public async Task<IActionResult> ChangeStatus(Guid id)
         {
-            return _eventService.ChangeStatus(id) ? Ok("Se ha cambiado el estado del evento") : NotFound();
+            return await _eventService.ChangeStatus(id) ? Ok("Se ha cambiado el estado del evento") : NotFound();
         }
 
 
