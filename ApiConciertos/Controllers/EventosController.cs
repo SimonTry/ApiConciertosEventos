@@ -1,4 +1,5 @@
-﻿using ApiConciertos.Models;
+﻿using ApiConciertos.Interfaces;
+using ApiConciertos.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiConciertos.Controllers
@@ -7,45 +8,56 @@ namespace ApiConciertos.Controllers
     [Route("api/[controller]")]
     public class EventosController : Controller
     {
-        private static List<Eventos> _eventos = new List<Eventos>
+        private readonly IEventosService _eventService;
+
+        public EventosController(IEventosService eventosService)
         {
-            new Eventos { id_evento = 1, nombre_evento = "Concierto Rock", fecha_evento = "2023-09-15", artista = "Rock Band" },
-            new Eventos { id_evento = 2, nombre_evento = "Festival Pop", fecha_evento = "2023-10-20", artista = "Pop Star" },
-            new Eventos { id_evento = 3, nombre_evento = "Noche de Jazz", fecha_evento = "2023-11-05", artista = "Jazz Ensemble" }
-        };
+            _eventService = eventosService;
+        }
         public IActionResult Index()
         {
             return View();
         }
 
         [HttpGet]
-        public IActionResult GetAll()
-        {
-            return Ok(_eventos);
-        }
+        public async Task<IActionResult> GetAll() => Ok( await _eventService.GetAll());
 
         [HttpGet("{id}")]
-        public IActionResult getById(int id)
+        public async Task<IActionResult> getById(Guid id)
         {
-            var evento = _eventos.FirstOrDefault(e => e.id_evento == id);
-            if(evento == null)
-            {
-                return NotFound("No existe el evento");
-            }
-            return Ok(evento);
+            var evento = await _eventService.getById(id);
+            //Se refactoriza condicion por una operación ternaria o si corto
+            return evento != null ? Ok(evento) : NotFound();
+            //if (evento == null)
+            //{
+            //    return NotFound("No existe el evento");
+            //}
+            //return Ok(evento);
         }
 
         [HttpPost]
-        public IActionResult Create([FromBody] Eventos newEvent)
+        public async Task<IActionResult> Create([FromBody] Eventos newEvent)
         {
-            
-                newEvent.id_evento = _eventos.Max(e => e.id_evento) + 1;
-                _eventos.Add(newEvent);
-                return CreatedAtAction(nameof(getById),
-                    new { id = newEvent.id_evento }, newEvent);
-            
-               
+
+            var createdEvent = await _eventService.Create(newEvent);
+            return CreatedAtAction(nameof(getById),new { id = createdEvent.id_evento }, createdEvent);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> Edit(Guid id, [FromBody] Eventos editedEvent)
+        {
+
+            return await _eventService.Update(id, editedEvent) ? NoContent(): NotFound();
+        }
+
+        [HttpPatch("{id}/change-status")]
+        public async Task<IActionResult> ChangeStatus(Guid id)
+        {
+            return await _eventService.ChangeStatus(id) ? Ok("Se ha cambiado el estado del evento") : NotFound();
+        }
+
+
+
 
     }
 }
