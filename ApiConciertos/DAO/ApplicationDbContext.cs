@@ -14,6 +14,7 @@ namespace ApiConciertos.DAO
         //Es decir que Entity Framework lee este archivo para tomar del modelo el esquema de las tablas
 
         public DbSet<Eventos> Events { get; set; }
+        public DbSet<Boleta> Tickets { get; set; }
     
     }
 }
