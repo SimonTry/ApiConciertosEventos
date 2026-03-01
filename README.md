@@ -43,7 +43,6 @@ dotnet tool install --global dotnet-ef
 ```
 
 > [!IMPORTANT]
-
 > Si ya tienes instalada la herramienta y recibes errores de versión, puedes actualizarla con: dotnet tool update --global dotnet-ef.
 
 ## 3. Database Migrations
@@ -87,5 +86,4 @@ JSON
 }
 
 > [!WARNING]
-
 > Por seguridad, nunca incluyas contraseñas reales en este archivo si el repositorio es público. En producción, utiliza Variables de Entorno.
