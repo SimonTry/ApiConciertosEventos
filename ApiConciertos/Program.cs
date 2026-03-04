@@ -1,6 +1,7 @@
 using ApiConciertos.DAO;
 using ApiConciertos.Interfaces;
 using ApiConciertos.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Scalar.AspNetCore;
 
@@ -11,8 +12,16 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 // Le pasas las opciones de configuración al constructor de ApplicationDbContext que hereda las propiedades de DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
 
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = true;
+    options.Password.RequiredLength = 8;
+    options.Password.RequireNonAlphanumeric = false;
+}).AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 // Add services to the container.
 builder.Services.AddScoped<IEventosService, EventosService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
