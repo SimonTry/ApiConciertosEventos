@@ -11,7 +11,7 @@ dotnet add package Scalar.AspNetCore
 ### Initialize in Program.cs
 Para habilitar Scalar, registra el soporte de OpenAPI y mapea la interfaz en el pipeline de la aplicación:
 
-C#
+```csharp
 // Program.cs
 builder.Services.AddOpenApi();
 
@@ -22,6 +22,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(); // Accede vía /scalar/v1 por defecto
 }
+``
 
 > [!NOTE]
 > Scalar utiliza la especificación OpenAPI generada dinámicamente por .NET para renderizar la documentación interactiva.
