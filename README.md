@@ -22,7 +22,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
     app.MapScalarApiReference(); // Accede vía /scalar/v1 por defecto
 }
-``
+```
 
 > [!NOTE]
 > Scalar utiliza la especificación OpenAPI generada dinámicamente por .NET para renderizar la documentación interactiva.
