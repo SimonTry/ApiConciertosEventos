@@ -1,11 +1,15 @@
 ﻿using ApiConciertos.Interfaces;
 using ApiConciertos.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiConciertos.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    // con este DataAnnotation solo se dejará ejecutar los endpoint a los JWT que sea de Admin
+    // Si se quiere agregar ás roles se separa por comas Admin,User,Colab
+    [Authorize(Roles = "Admin")]
     public class EventosController : Controller
     {
         private readonly IEventosService _eventService;
@@ -20,6 +24,9 @@ namespace ApiConciertos.Controllers
         }
 
         [HttpGet]
+        // Este DataAnnotation sirve para que este endpoint en específico no requiera de autenticación
+        // Por defecto el authorize toma todos los endpoints que no tengan este indicativo
+        [AllowAnonymous]
         public async Task<IActionResult> GetAll() => Ok( await _eventService.GetAll());
 
         [HttpGet("{id}")]
