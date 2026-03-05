@@ -48,10 +48,13 @@ namespace ApiConciertos.Services
 
         public async Task<string?> Login(string email, string pwd)
         {
+            //validmamos que el usuario exista
             var user = await _userManager.FindByEmailAsync(email);
-
+            //validamos que si sea la contraseña correcta
             if(user != null && await _userManager.CheckPasswordAsync(user, pwd))
             {
+                //validamos los roles del usuario que tiene asociados y enviamos esta información a
+                // la función de generar token
                 var userRoles = await _userManager.GetRolesAsync(user);
                 return GenerarJwtToken(user, userRoles);
 
@@ -62,6 +65,9 @@ namespace ApiConciertos.Services
 
         private string GenerarJwtToken(IdentityUser user, IList<string> roles)
         {
+            //Adicionamos los Claim para el token
+            //Los claim son como valores adicionales del payload para nutrir de información 
+            // el token
             var authClaims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -69,14 +75,19 @@ namespace ApiConciertos.Services
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
             };
 
+            //Agregamos el rol al claim
+
             foreach (var role in roles)
             {
                 authClaims.Add(new Claim(ClaimTypes.Role, role));
             }
 
+            // Caputramos la firma del servidor
             var authFirmaKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 _configuration["Jwt:Key"]!));
 
+
+            //creamos el token con la firma del servidor y le damos un tiempo de vida de 3 horas
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
                 audience: _configuration["Jwt:Audience"],
@@ -86,6 +97,7 @@ namespace ApiConciertos.Services
                     authFirmaKey, SecurityAlgorithms.HmacSha256)
                 );
 
+            //retornamos el texto del token
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 

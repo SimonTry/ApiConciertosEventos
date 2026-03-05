@@ -4,6 +4,7 @@ namespace ApiConciertos.Models.DTOs
 {
     public class RegisterDTO
     {
+        //Este DTO sirve para definir el modelo para registrar un usuario
         [Required(ErrorMessage = "El email es obligatorio")]
         [EmailAddress]
         public string Email { get; set; } = null!;
