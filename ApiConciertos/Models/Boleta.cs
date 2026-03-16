@@ -12,10 +12,29 @@ namespace ApiConciertos.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public Guid id_boleta { get; set; }
 
+        // Relación con Eventos
+        [Required]
+        public Guid EventoId { get; set; }
+
+        [ForeignKey("EventoId")]
+        public Eventos? Evento { get; set; }
+
+        // Relación con Clientes (IdentityUser)
+        [Required]
+        public Guid ClienteId { get; set; }
+
+        [ForeignKey("ClienteId")]
+        public Clientes? Cliente { get; set; }
+
         public double valor_unitario { get; set; }
 
         public string fecha_compra { get; set; }
+
+        [Required]
+        public string NroAsiento { get; set; } = string.Empty;
+
         public string numero_boleta { get; set; }
+        public string ticketStatus { get; set; } = "Reserved";
         public int isActive { get; set; }
     }
 }

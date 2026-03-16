@@ -4,6 +4,7 @@ using ApiConciertos.DAO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiConciertos.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260311224105_UpdateTicketsSchema")]
+    partial class UpdateTicketsSchema
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -73,7 +76,7 @@ namespace ApiConciertos.Migrations
 
                     b.Property<string>("IdentityUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("isActive")
                         .HasColumnType("int");
@@ -83,8 +86,6 @@ namespace ApiConciertos.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Cliente_Id");
-
-                    b.HasIndex("IdentityUserId");
 
                     b.ToTable("Clients");
                 });
@@ -330,17 +331,6 @@ namespace ApiConciertos.Migrations
                     b.Navigation("Cliente");
 
                     b.Navigation("Evento");
-                });
-
-            modelBuilder.Entity("ApiConciertos.Models.Clientes", b =>
-                {
-                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
-                        .WithMany()
-                        .HasForeignKey("IdentityUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("IdentityUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

@@ -8,6 +8,7 @@ using ApiConciertos.Interfaces;
 using ApiConciertos.Services;
 using Scalar.AspNetCore;
 using System.Text;
+using Replica.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,7 +44,12 @@ builder.Services.AddAuthentication(options => {
 });
 
 // Add services to the container.
+// Aquí agregamos la inyección de dependencia de nuestros servicios
+// sin esto, los controladores no van a servir ya que no se inyecta el constructor o el objeto
+// que permite ir y llamar la capa lógica que tiene las operaciones CRUD o demás reglas de negocio
 builder.Services.AddScoped<IEventosService, EventosService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
+builder.Services.AddScoped<IClientService, ClientService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

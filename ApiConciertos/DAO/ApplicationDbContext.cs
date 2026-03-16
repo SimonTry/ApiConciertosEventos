@@ -17,6 +17,7 @@ namespace ApiConciertos.DAO
 
         public DbSet<Eventos> Events { get; set; }
         public DbSet<Boleta> Tickets { get; set; }
-    
+        public DbSet<Clientes> Clients { get; set; }
+
     }
 }
