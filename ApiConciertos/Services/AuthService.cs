@@ -10,6 +10,8 @@ namespace ApiConciertos.Services
 {
     public class AuthService : IAuthService
     {
+        // estas variables nos ayudarán a acceder a las propiedas para crear usuario
+        // para crear roles y asignar roles  aun usuario
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IConfiguration _configuration;
@@ -70,6 +72,9 @@ namespace ApiConciertos.Services
             // el token
             var authClaims = new List<Claim>
             {
+                // Agregamos el Id del usuario en el token
+                // Esto nos ayudará a validar que ese Id corresponda a la relación
+                // con un cliente para validar si si puede realizar la acción
                 new Claim(ClaimTypes.NameIdentifier, user.Id),
                 new Claim(JwtRegisteredClaimNames.Email, user.Email!),
                 new Claim(JwtRegisteredClaimNames.Jti,Guid.NewGuid().ToString())
