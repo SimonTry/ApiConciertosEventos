@@ -28,7 +28,9 @@ namespace ApiConciertos.Models
 
         public double valor_unitario { get; set; }
 
-        public DateTime FechaCompra { get; set; } = DateTime.UtcNow;
+        public string fecha_compra { get; set; }
+        // Para poner la fecha por defecto y no enviarla en el body reemplace la línea de arriba por esta de abajo
+        //public DateTime FechaCompra { get; set; } = DateTime.UtcNow;
 
         [Required]
         public string NroAsiento { get; set; } = string.Empty;
