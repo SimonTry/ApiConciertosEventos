@@ -28,7 +28,7 @@ namespace ApiConciertos.Models
 
         public double valor_unitario { get; set; }
 
-        public string fecha_compra { get; set; }
+        public DateTime FechaCompra { get; set; } = DateTime.UtcNow;
 
         [Required]
         public string NroAsiento { get; set; } = string.Empty;
